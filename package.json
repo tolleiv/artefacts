@@ -6,6 +6,12 @@
       "start": "node app"
     },
     "dependencies":  {
-        "vows":  ">= 0.0.1"
+        "express": "3.x",
+        "request": "> 0.0.1",
+        "persist": ">= 0.0.1",
+        "sqlite3": ">= 0.0.1",
+        "jasmine-node":  ">= 0.0.1",
+        "db-migrate": ">=0.0.3",
+        "async": ">=0.0.3"
     }
 }
