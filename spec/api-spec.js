@@ -5,6 +5,23 @@ var models = require('../lib/models');
 describe("the Api", function () {
     var request = helper.req;
 
+    var respondsPositive = function(cb) {
+        return function(err, res, body) {
+            expect(err).toBeNull();
+            expect(res.statusCode).toEqual(200);
+            cb && cb(body);
+        }
+    }
+    var negativeResponse = function(cb) {
+        return function(err, res, body) {
+            expect(err).toBe(null)
+            expect(res.statusCode).toBeGreaterThan(399)
+            expect(res.statusCode).toBeLessThan(500)
+            cb && cb(body);
+        }
+
+    }
+
     describe("when working with projects", function () {
       beforeEach(function () {
             var p1 = new models.Project({ title: "Foo1" })
@@ -19,62 +36,55 @@ describe("the Api", function () {
         afterEach(helper.stop);
 
         it("lists existing projects", function (done) {
-            request.get("/", function(err, res, body) {
-                expect(err).toBe(null);
-                expect(res.statusCode).toEqual(200);
-                expect(body.length).toBeGreaterThan(0);
-
+            request.get("/", respondsPositive(function(body) {
                 var result = JSON.parse(body);
                 expect(result).toEqual(jasmine.any(Array));
                 expect(result.length).toEqual(4);
                 expect(result[0].title).toEqual('Foo1');
 
                 done();
-            });
+            }));
         });
 
         it("can show single projects", function (done) {
-            request.get("/project/3", function (err, res, body) {
-                expect(err).toBe(null);
-                expect(res.statusCode).toEqual(200);
-                expect(body.length).toBeGreaterThan(0);
-
+            request.get("/project/3", respondsPositive(function(body) {
                 var result = JSON.parse(body);
                 expect(result).toEqual(jasmine.any(Object));
                 expect(result.title).toEqual('Foo3');
                 done();
-            });
+            }));
         });
 
+        it("raises an error when missing projects are accessed", function(done) {
+            request.get("/project/0", negativeResponse(function() {
+                done();
+            }))
+
+        })
+
         it("can create new projects", function (done) {
-            request.post('/project', {title: 'Bar'}, function (err, res, body) {
-                expect(err).toBe(null);
-                expect(res.statusCode).toEqual(200);
+            request.post('/project', {title: 'Bar'}, respondsPositive(function(body) {
                 expect(body).toEqual(jasmine.any(Object));
                 expect(body.title).toEqual('Bar');
                 expect(body.id).toBeGreaterThan(4)
                 done();
-            });
+            }));
         });
         it("can update existing projects", function (done) {
-            request.put('/project/3', {title: 'Bar'}, function (err, res, body) {
-                expect(err).toBe(null);
-                expect(res.statusCode).toEqual(200);
+            request.put('/project/3', {title: 'Bar'}, respondsPositive(function(body) {
                 expect(body).toEqual(jasmine.any(Object));
                 expect(body.title).toEqual('Bar');
                 expect(body.id).toEqual(3);
                 done();
-            });
+            }));
         });
         it("deletes existing projects", function(done) {
-            request.del('/project/2', function(err, res, body) {
-                expect(err).toBe(null);
-                expect(res.statusCode).toEqual(200); // delete ok
+            request.del('/project/2', respondsPositive(function(body) {
                 request.get("/project/3", function (err, res,body) {
                     expect(res.statusCode).toEqual(200); // object can't be found
                     done();
                 })
-            })
+            }))
         });
     });
 });
