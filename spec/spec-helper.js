@@ -1,8 +1,54 @@
-var Requester, request;
 var http = require('http');
-request = require("request");
+var dbm = require('db-migrate');
+var request = require("request");
+var assert = require('assert');
+var path = require('path');
+var model = require('../lib/models')
 
-var server, app, started=false;
+var server, app, started = false, migrate;
+
+exports.migrate = migrate = {
+    db: { "driver": "sqlite3", "filename": "test.db", silent: true },
+
+    connect: function (callback) {
+        dbm.connect(this.db, function (err, migrator) {
+            assert.ifError(err);
+            migrator.migrationsDir = path.resolve('./migrations');
+            migrator.driver.createMigrationsTable(function (err) {
+                assert.ifError(err);
+                callback(migrator);
+            });
+        });
+    },
+    close: function (migrator, callback) {
+        migrator.driver.close(function (err) {
+            assert.ifError(err);
+            callback();
+        });
+    },
+    up: function (callback) {
+        global.silent=true
+        var done = this.close.bind(this)
+        this.connect(function (migrator) {
+            migrator.up({count: Number.MAX_VALUE}, function (err) {
+                assert.ifError(err);
+                global.silent=false
+                done(migrator, callback);
+            });
+        })
+    },
+    down: function (callback) {
+        global.silent=true
+        var done = this.close.bind(this)
+        this.connect(function (migrator) {
+            migrator.down({count: 1}, function (err) {
+                assert.ifError(err);
+                global.silent=true
+                done(migrator, callback);
+            });
+        });
+    }
+}
 
 exports.req = {
     get: function (path, callback) {
@@ -20,22 +66,39 @@ exports.req = {
             json: data
         }, callback);
     },
-    del: function(path, callback) {
+    del: function (path, callback) {
         return request.del("http://127.0.0.1:3000" + path, callback);
+    },
+    respondsPositive:  function (cb) {
+        return function (err, res, body) {
+            expect(err).toBeNull();
+            expect(res.statusCode).toEqual(200);
+            cb && cb(body);
+        }
+    },
+    respondsNegative: function (cb) {
+        return function (err, res, body) {
+            expect(err).toBe(null)
+            expect(res.statusCode).toBeGreaterThan(399)
+            expect(res.statusCode).toBeLessThan(500)
+            cb && cb(body);
+        }
     }
 };
 
 
-var createModel = function(persist, objects, callback) {
-    persist.connect(function(err, conn) {
-        var actions = [Project.deleteAll]
-        for(var i=0;i<objects.length;i++) {
-            actions.push(objects[i].save)
-        }
-        conn.chain(actions, function(err, results) {
-            callback(conn)
+var createModel = function (persist, objects, callback) {
+    migrate.up(function () {
+        persist.connect(function (err, conn) {
+            var actions = [model.Project.deleteAll, model.Pipeline.deleteAll]
+            for (var i = 0; i < objects.length; i++) {
+                actions.push(objects[i].save)
+            }
+            conn.chain(actions, function (err, results) {
+                callback(conn)
+            });
         });
-    });
+    })
 }
 var startServer = function (env, model, conn) {
     app = require("../lib/api.js").app;
@@ -45,24 +108,30 @@ var startServer = function (env, model, conn) {
     server = http.createServer(app);
     server.listen(3000)
         .on('listening', function () {
-            setTimeout(function() { started=true; }, 100)
+            setTimeout(function () {
+                started = true;
+            }, 100)
         })
-        .on('close', function() { started=false; });
+        .on('close', function () {
+            started = false;
+        });
 };
 
-exports.start = function(persist, models, objects) {
-    return function() {
-        persist.env = 'dev';
-        createModel(persist, objects, function(conn) {
-            startServer('dev', models, conn)
+exports.start = function (persist, models, objects) {
+    return function () {
+        persist.env = 'test';
+        createModel(persist, objects, function (conn) {
+            startServer('test', models, conn)
         })
     }
 };
 
-exports.isStarted = function() {
+exports.isStarted = function () {
     return started;
 };
 
 exports.stop = function (cb) {
-    server.close(cb);
+    migrate.down(function () {
+        server.close(cb);
+    });
 };
