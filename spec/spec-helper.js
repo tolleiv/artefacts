@@ -43,7 +43,7 @@ exports.migrate = migrate = {
         this.connect(function (migrator) {
             migrator.down({count: 1}, function (err) {
                 assert.ifError(err);
-                global.silent=true
+                global.silent=false
                 done(migrator, callback);
             });
         });
@@ -90,7 +90,7 @@ exports.req = {
 var createModel = function (persist, objects, callback) {
     migrate.up(function () {
         persist.connect(function (err, conn) {
-            var actions = [model.Project.deleteAll, model.Pipeline.deleteAll]
+            var actions = [model.Project.deleteAll, model.Pipeline.deleteAll, model.Artefact.deleteAll]
             for (var i = 0; i < objects.length; i++) {
                 actions.push(objects[i].save)
             }
