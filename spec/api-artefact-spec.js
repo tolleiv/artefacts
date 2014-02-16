@@ -49,7 +49,25 @@ describe("the artefact API", function () {
     it("fails when creating artefacts with equal versions", function(done) {
         request.post('/artefact', {version: '0.0.2', pipeline_id: 1}, respondsNegative(function (body) {
             expect(body.message).toContain('Wrong version')
+            expect(body.message).toContain('already exists')
             done();
         }));
-    })
+    });
+    it("can update artefacts", function(done) {
+        request.put('/artefact/3', {artefactPath: 'tolleiv', buildUrl: 'test'}, respondsPositive(function (body) {
+            expect(body).toEqual(jasmine.any(Object));
+            expect(body.artefactPath).toEqual('tolleiv');
+            expect(body.buildUrl).toEqual('test');
+            expect(body.id).toEqual(3);
+            done();
+        }));
+    });
+    it("deletes existing artefacts", function (done) {
+        request.del('/artefact/3', respondsPositive(function (body) {
+            request.get("/artefact/3", function (err, res, body) {
+                expect(res.statusCode).toEqual(404); // object can't be found
+                done();
+            });
+        }));
+    });
 });
