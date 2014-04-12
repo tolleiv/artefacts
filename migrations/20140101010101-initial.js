@@ -23,12 +23,12 @@ exports.up = function (db, callback) {
             build_url: { type: 'string' },
             artefact_path: { type: 'string' }
         }),
-        db.createTable.bind(db, 'Stages', {
+        db.createTable.bind(db, 'States', {
             id: { type: 'int', primaryKey: true },
             last_updated: { type: 'datetime', notNull: true },
-            project_id: { type: 'int', notNull: true },
+            artefact_id: { type: 'int', notNull: true },
             time: { type: 'string' },
-            state: { type: 'string' },
+            stage: { type: 'string' },
             person: { type: 'string' }
         })
     ], callback);
@@ -41,6 +41,6 @@ exports.down = function (db, callback) {
         db.dropTable.bind(db, 'Projects'),
         db.dropTable.bind(db, 'Pipelines'),
         db.dropTable.bind(db, 'Artefacts'),
-        db.dropTable.bind(db, 'Stages')
+        db.dropTable.bind(db, 'States')
     ], callback);
 };
