@@ -8,15 +8,14 @@ describe("the pipeline API", function () {
     var respondsNegative = helper.req.respondsNegative
 
     beforeEach(function () {
-        var sm = new models.StateMachine({ title: 'default'});
         var p1 = new models.Project({ title: "Foo1" })
         var p2 = new models.Project({ title: "Foo2" })
-        var pp11 = new models.Pipeline({title: "mainPipe11", project: p1, statemachine: sm });
-        var pp12 = new models.Pipeline({title: "refactoring", project: p1, statemachine: sm })
-        var pp21 = new models.Pipeline({title: "mainPipe21", project: p2, statemachine: sm })
+        var pp11 = new models.Pipeline({title: "mainPipe11", project: p1 });
+        var pp12 = new models.Pipeline({title: "refactoring", project: p1 })
+        var pp21 = new models.Pipeline({title: "mainPipe21", project: p2 })
 
         runs(helper.start(persist, models, [
-            sm, p1, p2, pp11, pp12, pp21
+            p1, p2, pp11, pp12, pp21
         ]));
         waitsFor(helper.isStarted);
     });
@@ -40,7 +39,7 @@ describe("the pipeline API", function () {
         }));
     });
     it("can create pipelines", function (done) {
-        request.post('/pipeline', {title: 'relaunch', project_id: 2, state_machine_id: 1}, respondsPositive(function (body) {
+        request.post('/pipeline', {title: 'relaunch', project_id: 2}, respondsPositive(function (body) {
             expect(body).toEqual(jasmine.any(Object));
             expect(body.title).toEqual('relaunch');
             expect(body.id).toBeGreaterThan(3)
@@ -48,7 +47,7 @@ describe("the pipeline API", function () {
         }));
     });
     it("doesn't create a pipeline with invalid projects", function (done) {
-        request.post('/pipeline', {title: 'fail', project_id: 100, state_machine_id: 1}, respondsNegative(function (body) {
+        request.post('/pipeline', {title: 'fail', project_id: 100}, respondsNegative(function (body) {
             expect(body.message).toEqual('Project invalid')
             done();
         }));

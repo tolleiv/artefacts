@@ -72,9 +72,13 @@ exports.req = {
     respondsPositive:  function (cb) {
         return function (err, res, body) {
             expect(err).toBeNull();
-            expect(res.statusCode).toEqual(200);
-            if (res.statusCode != 200) console.log(res.body)
+            if (res) {
+                expect(res.statusCode).toEqual(200);
+                if (res.statusCode != 200) console.log(res.body)
+            }
+
             cb && cb(body);
+
         }
     },
     respondsNegative: function (cb) {
@@ -91,8 +95,7 @@ exports.req = {
 var createModel = function (persist, objects, callback) {
     migrate.up(function () {
         persist.connect(function (err, conn) {
-            var actions = [model.Project.deleteAll, model.Pipeline.deleteAll, model.Artefact.deleteAll,
-                model.StateMachine.deleteAll, model.State.deleteAll]
+            var actions = [model.Project.deleteAll, model.Pipeline.deleteAll, model.ArtefactState.deleteAll, model.Artefact.deleteAll, model.State.deleteAll]
             for (var i = 0; i < objects.length; i++) {
                 actions.push(objects[i].save)
             }
@@ -107,7 +110,7 @@ var startServer = function (env, model, conn) {
     app = require("../lib/api.js").app;
     app.set('env', env);
     app.set('model', model);
-    app.set('connection', conn)
+    app.set('connection', conn);
     server = http.createServer(app);
     server.listen(3000)
         .on('listening', function () {

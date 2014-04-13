@@ -1,15 +1,23 @@
+Usage
+=====
+
+
+Command line
+------------
+
+` curl -i -X PUT http://localhost:3000/artefact-/1/first/green `
+
+
 The Model {+Metadata} {+Operations}
 -----------------------------------
 
-![Model UML](http://yuml.me/eca76789)
-
-* statemachine { title, initialState } {CRUD}
-* state {title, ttl} {CRUD}
+![Model UML](http://yuml.me/9c218eba)
 
 * project {title} {CRUD}
-* pipeline {title, stateMachine} {CRUD+ lastSuccessfulForState, cleanupArtefact}
+* pipeline {title} {CRUD+ lastSuccessfulForState, cleanupArtefact}
 * artefact {version, buildUrl, artefactPath, currentState} {CRUD+ }
-
+* artefactState {code, artefact,state}
+* state {title, ttl} {CRUD}
 
 Build status
 ------------

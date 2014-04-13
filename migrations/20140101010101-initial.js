@@ -13,38 +13,32 @@ exports.up = function (db, callback) {
             id: { type: 'int', primaryKey: true },
             last_updated: { type: 'datetime', notNull: true },
             project_id: { type: 'int', notNull: true },
-            state_machine_id: { type: 'int', notNull: true },
             title: { type: 'string' }
         }),
         db.createTable.bind(db, 'Artefacts', {
             id: { type: 'int', primaryKey: true },
             last_updated: { type: 'datetime', notNull: true },
             pipeline_id: { type: 'int', notNull: true },
-            current_state_id: { type: 'int' },
-//            state_id: { type: 'int' }, // not used but needed by node-persist
             version: { type: 'string' },
             build_url: { type: 'string' },
             artefact_path: { type: 'string' }
         }),
-
-        db.createTable.bind(db, 'StateMachines', {
-           id:  { type: 'int', primaryKey: true },
-           last_updated: { type: 'datetime', notNull: true },
-           title: { type: 'string' },
-           initial_state_id: { type: 'int' },
-//           state_id: { type: 'int' } // not used but needed by node-persist
+        db.createTable.bind(db, 'ArtefactStates', {
+            id: { type: 'int', primaryKey: true },
+            last_updated: { type: 'datetime', notNull: true },
+            artefact_id: { type: 'int', notNull: true },
+            state_id: { type: 'int', notNull: true },
+            build_url: { type: 'string' },
+            code: { type: 'string' }
         }),
-
         db.createTable.bind(db, 'States', {
             id: { type: 'int', primaryKey: true },
             last_updated: { type: 'datetime', notNull: true },
-            state_machine_id: { type: 'int', notNull: true },
             title: { type: 'string' },
-            ttl: { type: 'int' },
-            color: { type: 'string' }
+            time_to_red: { type: 'int' }
         })
     ],
-        function(err) {
+        function (err) {
             err && console.log(err);
             callback.apply(arguments)
         });
@@ -57,7 +51,7 @@ exports.down = function (db, callback) {
         db.dropTable.bind(db, 'Projects'),
         db.dropTable.bind(db, 'Pipelines'),
         db.dropTable.bind(db, 'Artefacts'),
-        db.dropTable.bind(db, 'StateMachines'),
+        db.dropTable.bind(db, 'ArtefactStates'),
         db.dropTable.bind(db, 'States')
     ], callback);
 };

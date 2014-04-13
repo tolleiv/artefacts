@@ -8,18 +8,19 @@ describe("the artefact API", function () {
     var respondsNegative = helper.req.respondsNegative
 
     beforeEach(function () {
-        var s;
-        var sm = new models.StateMachine({ title: 'default', initial_state: s});
-        s = new models.State({ title: 'first', statemachine: sm });
+        var s11 = new models.State({ title: 'first'});
+        var s12 = new models.State({ title: 'second'});
+        var s13 = new models.State({ title: 'third'});
+
         var p1 = new models.Project({ title: "Foo1" })
-        var pp11 = new models.Pipeline({title: "mainPipe11", project: p1, statemachine: sm });
-        var pp12 = new models.Pipeline({title: "refactoring", project: p1, statemachine: sm })
+        var pp11 = new models.Pipeline({title: "mainPipe11", project: p1 });
+        var pp12 = new models.Pipeline({title: "refactoring", project: p1 })
         var a11 = new models.Artefact({version: "0.0.1", pipeline: pp11});
         var a12 = new models.Artefact({version: "0.0.2", pipeline: pp11});
         var a13 = new models.Artefact({version: "0.0.3", pipeline: pp11});
 
         runs(helper.start(persist, models, [
-            sm, s, p1, pp11, pp12, pp12, a11, a12, a13
+            s11, s12, s13, p1, pp11, pp12, pp12, a11, a12, a13
         ]));
         waitsFor(helper.isStarted);
     });
@@ -73,6 +74,26 @@ describe("the artefact API", function () {
                 expect(res.statusCode).toEqual(404); // object can't be found
                 done();
             });
+        }));
+    });
+
+    it("can assign states to artefacts", function (done) {
+        request.put('/artefact/1/first/yellow', {buildUrl: 'ur://l'}, respondsPositive(function (body) {
+            expect(body).toEqual(jasmine.any(Object))
+            expect(body.artefactstates[0].code).toEqual('yellow');
+            expect(body.artefactstates[0].buildUrl).toEqual('ur://l')
+            done();
+        }));
+    });
+
+    it("can update assigned artefact states", function(done) {
+        request.put('/artefact/1/first/yellow', {buildUrl: 'ur://l'}, respondsPositive(function (body) {
+            request.put('/artefact/1/first/green', {}, respondsPositive(function (body) {
+                expect(body).toEqual(jasmine.any(Object))
+                expect(body.artefactstates[0].code).toEqual('green');
+                expect(body.artefactstates[0].buildUrl).toEqual('ur://l')
+                done();
+            }));
         }));
     });
 });
