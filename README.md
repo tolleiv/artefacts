@@ -1,10 +1,23 @@
-The Model {+Metadata} {+Operations}:
-====================================
+The Model {+Metadata} {+Operations}
+-----------------------------------
 
-http://yuml.me/eca76789
+![Model UML](http://yuml.me/eca76789)
 
-state {time, stageStep, person}
-  ^- artefact {version, buildUrl, artefactPath} {CRUD+ }
-    ^- stateStep { name, ttl, next }
-    ^- pipeline {name, firstStep} {CRUD+ lastSuccessfulForStage, cleanupArtefacts}
-      ^- project {name} {CRUD}
+* statemachine { title, initialState } {CRUD}
+* state {title, ttl} {CRUD}
+
+* project {title} {CRUD}
+* pipeline {title, stateMachine} {CRUD+ lastSuccessfulForState, cleanupArtefact}
+* artefact {version, buildUrl, artefactPath, currentState} {CRUD+ }
+
+
+Build status
+------------
+
+[![Build Status](https://travis-ci.org/tolleiv/artefacts.png?branch=master)](https://travis-ci.org/tolleiv/artefacts)
+
+
+License
+-------
+
+This is free and unencumbered software released into the public domain. See the UNLICENSE file or http://unlicense.org/ for more details.
