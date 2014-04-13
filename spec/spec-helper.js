@@ -73,6 +73,7 @@ exports.req = {
         return function (err, res, body) {
             expect(err).toBeNull();
             expect(res.statusCode).toEqual(200);
+            if (res.statusCode != 200) console.log(res.body)
             cb && cb(body);
         }
     },
@@ -90,11 +91,13 @@ exports.req = {
 var createModel = function (persist, objects, callback) {
     migrate.up(function () {
         persist.connect(function (err, conn) {
-            var actions = [model.Project.deleteAll, model.Pipeline.deleteAll, model.Artefact.deleteAll]
+            var actions = [model.Project.deleteAll, model.Pipeline.deleteAll, model.Artefact.deleteAll,
+                model.StateMachine.deleteAll, model.State.deleteAll]
             for (var i = 0; i < objects.length; i++) {
                 actions.push(objects[i].save)
             }
             conn.chain(actions, function (err, results) {
+                err && console.log(err)
                 callback(conn)
             });
         });

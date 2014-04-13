@@ -8,25 +8,29 @@ describe("the artefact API", function () {
     var respondsNegative = helper.req.respondsNegative
 
     beforeEach(function () {
+        var s;
+        var sm = new models.StateMachine({ title: 'default', initial_state: s});
+        s = new models.State({ title: 'first', statemachine: sm });
         var p1 = new models.Project({ title: "Foo1" })
-        var pp11 = new models.Pipeline({title: "main", project: p1});
-        var pp12 = new models.Pipeline({title: "refactoring", project: p1});
+        var pp11 = new models.Pipeline({title: "mainPipe11", project: p1, statemachine: sm });
+        var pp12 = new models.Pipeline({title: "refactoring", project: p1, statemachine: sm })
         var a11 = new models.Artefact({version: "0.0.1", pipeline: pp11});
         var a12 = new models.Artefact({version: "0.0.2", pipeline: pp11});
         var a13 = new models.Artefact({version: "0.0.3", pipeline: pp11});
 
         runs(helper.start(persist, models, [
-            p1, pp11, pp12, a11, a12, a13
+            sm, s, p1, pp11, pp12, pp12, a11, a12, a13
         ]));
         waitsFor(helper.isStarted);
     });
     afterEach(helper.stop);
+
     it("lists related artefacts", function (done) {
         request.get("/pipeline/1/artefacts", respondsPositive(function (body) {
-             var result = JSON.parse(body);
-             expect(result).toEqual(jasmine.any(Array));
-             expect(result.length).toEqual(3);
-             expect(result[1].version).toEqual('0.0.2');
+            var result = JSON.parse(body);
+            expect(result).toEqual(jasmine.any(Array));
+            expect(result.length).toEqual(3);
+            expect(result[1].version).toEqual('0.0.2');
             done();
         }));
     });
@@ -46,18 +50,19 @@ describe("the artefact API", function () {
             done();
         }));
     });
-    it("fails when creating artefacts with equal versions", function(done) {
+    it("fails when creating artefacts with equal versions", function (done) {
         request.post('/artefact', {version: '0.0.2', pipeline_id: 1}, respondsNegative(function (body) {
             expect(body.message).toContain('Wrong version')
             expect(body.message).toContain('already exists')
             done();
         }));
     });
-    it("can update artefacts", function(done) {
+    it("can update artefacts", function (done) {
         request.put('/artefact/3', {artefactPath: 'tolleiv', buildUrl: 'test'}, respondsPositive(function (body) {
             expect(body).toEqual(jasmine.any(Object));
             expect(body.artefactPath).toEqual('tolleiv');
             expect(body.buildUrl).toEqual('test');
+            expect(body.version).toEqual('0.0.3'); // old values should be kept
             expect(body.id).toEqual(3);
             done();
         }));

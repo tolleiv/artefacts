@@ -1,6 +1,10 @@
 The Model {+Metadata} {+Operations}:
+====================================
 
-stage {time, state, person, ttl}
+http://yuml.me/eca76789
+
+state {time, stageStep, person}
   ^- artefact {version, buildUrl, artefactPath} {CRUD+ }
-    ^- pipeline {name, stages} {CRUD+ lastSuccessfulForStage, cleanupArtefacts}
+    ^- stateStep { name, ttl, next }
+    ^- pipeline {name, firstStep} {CRUD+ lastSuccessfulForStage, cleanupArtefacts}
       ^- project {name} {CRUD}
