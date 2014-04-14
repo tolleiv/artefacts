@@ -69,6 +69,17 @@ exports.req = {
     del: function (path, callback) {
         return request.del("http://127.0.0.1:3000" + path, callback);
     },
+
+    redirectsTo: function(path, cb) {
+        return function(err, res, body) {
+            expect(err).toBeNull();
+            expect(res.statusCode).toBeGreaterThan(300)
+            expect(res.statusCode).toBeLessThan(305)
+            expect(res.headers.location).toEqual(path)
+            cb && cb(body);
+        }
+    },
+
     respondsPositive:  function (cb) {
         return function (err, res, body) {
             expect(err).toBeNull();
