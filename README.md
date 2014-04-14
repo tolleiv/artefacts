@@ -16,7 +16,7 @@ API overview
 
 Method | Path | Usage
 -------|------|------
-GET | / | List projects
+GET | /projects | List projects
 POST | /project | Create project
 GET, PUT, DEL | /project/:id | Read, Update, Delete project
 GET | /project/:id/pipelines | List pipelines for project
@@ -26,7 +26,8 @@ GET | /pipeline/:id/artefacts | List artefacts for pipeline
 POST | /artefact | Create artefact
 GET, PUT, DEL | /artefact/:id | Read, Update, Delete artefact
 PUT | /artefact/:id/:state/:code | Create/Update artefact state with specified code
-PUT | /c/:project/:pipeline/:artefact/:state/:code | Create/Update artefact and artefact state with the specified code.
+PUT | /c/:project/:pipeline/:artefact/:state/:code | Create/Update artefact state with the specified code for the existing artefact.
+POST | /c/:project/:pipeline/:artefact/:state/:code | Create artefact and artefact state (initial registration)
 
 The Model {+Metadata} {+Operations}
 -----------------------------------

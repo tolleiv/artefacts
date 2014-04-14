@@ -21,7 +21,7 @@ describe("the project API", function () {
     afterEach(helper.stop);
 
     it("lists existing projects", function (done) {
-        request.get("/", respondsPositive(function (body) {
+        request.get("/projects", respondsPositive(function (body) {
             var result = JSON.parse(body);
             expect(result).toEqual(jasmine.any(Array));
             expect(result.length).toEqual(4);
