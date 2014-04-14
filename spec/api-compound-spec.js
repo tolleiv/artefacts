@@ -2,7 +2,7 @@ var helper = require('./spec-helper');
 var persist = require("persist");
 var models = require('../lib/models');
 
-describe("the state API", function () {
+describe("the compound API", function () {
     var request = helper.req;
     var redirectsTo = helper.req.redirectsTo;
     var respondsPositive = helper.req.respondsPositive;
@@ -30,13 +30,13 @@ describe("the state API", function () {
     });
     afterEach(helper.stop);
 
-    it("redirects state creation along the readable path names of the artefact", function (done) {
+    it("redirects state creation", function (done) {
         request.put('/c/yourProject/refactoring/0.0.1/first/yellow', {buildUrl: 'ur://l'},
             redirectsTo('/artefact/4/1/yellow', done)
         );
     });
 
-    it("creates artefacts and with their state relations through readable paths", function (done) {
+    it("creates artefacts and with their state relations", function (done) {
         request.post('/c/yourProject/refactoring/0.0.2/first/green', {buildUrl: 'ur://l'},
             respondsPositive(function (body) {
                 expect(body).toEqual(jasmine.any(Object))
@@ -49,7 +49,7 @@ describe("the state API", function () {
         );
     });
 
-    it("fails to recreate existing artefacts with the readable path syntax", function (done) {
+    it("will fail to recreate existing artefacts", function (done) {
         request.post('/c/yourProject/refactoring/0.0.1/first/green', {},
             respondsNegative(function (body) {
                 expect(body.message).toContain('Wrong version');
