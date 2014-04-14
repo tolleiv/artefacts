@@ -4,7 +4,9 @@ var models = require('../lib/models');
 
 describe("the state API", function () {
     var request = helper.req;
-    var redirectsTo = helper.req.redirectsTo
+    var redirectsTo = helper.req.redirectsTo;
+    var respondsPositive = helper.req.respondsPositive;
+    var respondsNegative = helper.req.respondsNegative;
 
     beforeEach(function () {
         var s11 = new models.State({ title: 'first'});
@@ -31,6 +33,29 @@ describe("the state API", function () {
     it("redirects state creation along the readable path names of the artefact", function (done) {
         request.put('/c/yourProject/refactoring/0.0.1/first/yellow', {buildUrl: 'ur://l'},
             redirectsTo('/artefact/4/1/yellow', done)
+        );
+    });
+
+    it("creates artefacts and with their state relations through readable paths", function (done) {
+        request.post('/c/yourProject/refactoring/0.0.2/first/green', {buildUrl: 'ur://l'},
+            respondsPositive(function (body) {
+                expect(body).toEqual(jasmine.any(Object))
+                expect(body.version).toEqual('0.0.2')
+                expect(body.buildUrl).toEqual('ur://l')
+                expect(body.artefactstates[0].code).toEqual('green');
+                expect(body.artefactstates[0].buildUrl).toEqual('ur://l')
+                done();
+            })
+        );
+    });
+
+    it("fails to recreate existing artefacts with the readable path syntax", function (done) {
+        request.post('/c/yourProject/refactoring/0.0.1/first/green', {},
+            respondsNegative(function (body) {
+                expect(body.message).toContain('Wrong version');
+                expect(body.message).toContain('already exists');
+                done();
+            })
         );
     });
 });
