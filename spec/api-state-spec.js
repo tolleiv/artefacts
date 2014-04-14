@@ -36,10 +36,10 @@ describe("the state API", function () {
         }));
     });
     it("can update states", function (done) {
-        request.put('/state/1', {time_to_red: '3'}, respondsPositive(function (body) {
+        request.put('/state/1', {timeToRed: '3'}, respondsPositive(function (body) {
             expect(body).toEqual(jasmine.any(Object));
             expect(body.title).toEqual('first');
-            expect(body.time_to_red).toEqual(3);
+            expect(body.timeToRed).toEqual(3);
             expect(body.id).toEqual(1);
             done();
         }));
