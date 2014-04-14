@@ -1,12 +1,32 @@
 Usage
 =====
 
+Until now this has just a REST API - the UI will follow soon.
 
 Command line
 ------------
 
-` curl -i -X PUT http://localhost:3000/artefact-/1/first/green `
+` curl -i -X PUT http://localhost:3000/c/:project/:pipeline/:artefact/:state/:code `
 
+Development
+===========
+
+API overview
+------------
+
+Method | Path | Usage
+-------|------|------
+GET | / | List projects
+POST | /project | Create project
+GET, PUT, DEL | /project/:id | Read, Update, Delete project
+GET | /project/:id/pipelines | List pipelines for project
+POST | /pipeline | Create pipeline
+GET, PUT, DEL | /pipeline/:id | Read, Update, Delete pipeline
+GET | /pipeline/:id/artefacts | List artefacts for pipeline
+POST | /artefact | Create artefact
+GET, PUT, DEL | /artefact/:id | Read, Update, Delete artefact
+PUT | /artefact/:id/:state/:code | Create/Update artefact state with specified code
+PUT | /c/:project/:pipeline/:artefact/:state/:code | Create/Update artefact and artefact state with the specified code.
 
 The Model {+Metadata} {+Operations}
 -----------------------------------
