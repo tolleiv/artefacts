@@ -23,8 +23,13 @@ describe("the compound API", function () {
         var a13 = new models.Artefact({version: "0.0.3", pipeline: pp11});
         var a21 = new models.Artefact({version: "0.0.1", pipeline: pp22});
 
+        var as111 = new models.ArtefactState({artefact: a11, state: s11, code: 'green'});
+        var as112 = new models.ArtefactState({artefact: a11, state: s12, code: 'red'});
+        var as121 = new models.ArtefactState({artefact: a12, state: s11, code: 'yellow'});
+        var as122 = new models.ArtefactState({artefact: a12, state: s12, code: 'green'});
+
         runs(helper.start(persist, models, [
-            s11, s12, s13, p1, p2, pp11, pp12, pp22, a11, a12, a13, a21
+            s11, s12, s13, p1, p2, pp11, pp12, pp22, a11, a12, a13, a21, as111, as112, as121, as122
         ]));
         waitsFor(helper.isStarted);
     });
@@ -58,4 +63,19 @@ describe("the compound API", function () {
             })
         );
     });
+
+    it("is able to generate some basic statistics", function(done) {
+        request.get('/c/statistics', respondsPositive(function (body) {
+
+            expect(body).toEqual(jasmine.any(Object));
+            expect(body.projects).toEqual(2);
+            expect(body.pipelines).toEqual(3);
+            expect(body.artefacts).toEqual(4);
+            expect(body.states.green).toEqual(2);
+            expect(body.states.red).toEqual(1);
+            expect(body.states.yellow).toEqual(1);
+
+            done();
+        }));
+    })
 });
