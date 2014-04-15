@@ -36,7 +36,12 @@ exports.up = function (db, callback) {
             last_updated: { type: 'datetime', notNull: true },
             title: { type: 'string' },
             time_to_red: { type: 'int' }
-        })
+        }),
+        db.addIndex.bind(db, 'ArtefactStates', 'code_idx', ['code'], false),
+        db.addIndex.bind(db, 'Projects', 'project_title_idx', ['title'], false),
+        db.addIndex.bind(db, 'Pipelines', 'pipeline_title_idx', ['title'], false),
+        db.addIndex.bind(db, 'Artefacts', 'artefact_version_idx', ['version'], false),
+        db.addIndex.bind(db, 'States', 'state_title_idx', ['title'], false)
     ],
         function (err) {
             err && console.log(err);
@@ -48,6 +53,11 @@ exports.up = function (db, callback) {
 
 exports.down = function (db, callback) {
     async.series([
+        db.removeIndex.bind(db, 'ArtefactStates', 'code_idx'),
+        db.removeIndex.bind(db, 'Projects', 'project_title_idx'),
+        db.removeIndex.bind(db, 'Pipelines', 'pipeline_title_idx'),
+        db.removeIndex.bind(db, 'Artefacts', 'artefact_version_idx'),
+        db.removeIndex.bind(db, 'States', 'state_title_idx'),
         db.dropTable.bind(db, 'Projects'),
         db.dropTable.bind(db, 'Pipelines'),
         db.dropTable.bind(db, 'Artefacts'),
