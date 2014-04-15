@@ -21,9 +21,8 @@ describe("the state API", function () {
 
     it("can show single states", function (done) {
         request.get("/state/2", respondsPositive(function (body) {
-            var result = JSON.parse(body);
-            expect(result).toEqual(jasmine.any(Object));
-            expect(result.title).toEqual('second');
+            expect(body).toEqual(jasmine.any(Object));
+            expect(body.title).toEqual('second');
             done();
         }));
     });

@@ -52,22 +52,22 @@ exports.migrate = migrate = {
 
 exports.req = {
     get: function (path, callback) {
-        return request("http://127.0.0.1:3000" + path, callback);
+        return request({url: "http://127.0.0.1:3001" + path, json:true}, callback);
     },
     post: function (path, data, callback) {
         return request.post({
-            url: "http://127.0.0.1:3000" + path,
+            url: "http://127.0.0.1:3001" + path,
             json: data
         }, callback);
     },
     put: function (path, data, callback) {
         return request.put({
-            url: "http://127.0.0.1:3000" + path,
+            url: "http://127.0.0.1:3001" + path,
             json: data
         }, callback);
     },
     del: function (path, callback) {
-        return request.del("http://127.0.0.1:3000" + path, callback);
+        return request.del("http://127.0.0.1:3001" + path, callback);
     },
 
     redirectsTo: function(path, cb) {
@@ -123,7 +123,7 @@ var startServer = function (env, model, conn) {
     app.set('model', model);
     app.set('connection', conn);
     server = http.createServer(app);
-    server.listen(3000)
+    server.listen(3001)
         .on('listening', function () {
             setTimeout(function () {
                 started = true;

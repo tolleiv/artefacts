@@ -22,19 +22,17 @@ describe("the project API", function () {
 
     it("lists existing projects", function (done) {
         request.get("/projects", respondsPositive(function (body) {
-            var result = JSON.parse(body);
-            expect(result).toEqual(jasmine.any(Array));
-            expect(result.length).toEqual(4);
-            expect(result[0].title).toEqual('Foo1');
+            expect(body).toEqual(jasmine.any(Array));
+            expect(body.length).toEqual(4);
+            expect(body[0].title).toEqual('Foo1');
 
             done();
         }));
     });
     it("can show single projects", function (done) {
         request.get("/project/3", respondsPositive(function (body) {
-            var result = JSON.parse(body);
-            expect(result).toEqual(jasmine.any(Object));
-            expect(result.title).toEqual('Foo3');
+            expect(body).toEqual(jasmine.any(Object));
+            expect(body.title).toEqual('Foo3');
             done();
         }));
     });

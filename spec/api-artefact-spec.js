@@ -28,18 +28,16 @@ describe("the artefact API", function () {
 
     it("lists related artefacts", function (done) {
         request.get("/pipeline/1/artefacts", respondsPositive(function (body) {
-            var result = JSON.parse(body);
-            expect(result).toEqual(jasmine.any(Array));
-            expect(result.length).toEqual(3);
-            expect(result[1].version).toEqual('0.0.2');
+            expect(body).toEqual(jasmine.any(Array));
+            expect(body.length).toEqual(3);
+            expect(body[1].version).toEqual('0.0.2');
             done();
         }));
     });
     it("can show single artefacts", function (done) {
         request.get("/artefact/2", respondsPositive(function (body) {
-            var result = JSON.parse(body);
-            expect(result).toEqual(jasmine.any(Object));
-            expect(result.version).toEqual('0.0.2');
+            expect(body).toEqual(jasmine.any(Object));
+            expect(body.version).toEqual('0.0.2');
             done();
         }));
     });

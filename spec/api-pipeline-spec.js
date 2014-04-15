@@ -22,9 +22,8 @@ describe("the pipeline API", function () {
     afterEach(helper.stop);
     it("lists existing pipelines", function (done) {
         request.get("/project/1/pipelines", respondsPositive(function (body) {
-            var result = JSON.parse(body);
-            expect(result).toEqual(jasmine.any(Array));
-            expect(result.length).toEqual(2);
+            expect(body).toEqual(jasmine.any(Array));
+            expect(body.length).toEqual(2);
 //            expect(result[1].title).toEqual('refactoring');
 
             done();
@@ -32,9 +31,8 @@ describe("the pipeline API", function () {
     });
     it("can show single pipelines", function (done) {
         request.get("/pipeline/2", respondsPositive(function (body) {
-            var result = JSON.parse(body);
-            expect(result).toEqual(jasmine.any(Object));
-            expect(result.title).toEqual('refactoring');
+            expect(body).toEqual(jasmine.any(Object));
+            expect(body.title).toEqual('refactoring');
             done();
         }));
     });
