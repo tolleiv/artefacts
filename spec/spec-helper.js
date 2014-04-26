@@ -4,6 +4,7 @@ var request = require("request");
 var assert = require('assert');
 var path = require('path');
 var model = require('../lib/models')
+var events = require("events");
 
 var server, app, started = false, migrate;
 
@@ -122,6 +123,10 @@ var startServer = function (env, model, conn) {
     app.set('env', env);
     app.set('model', model);
     app.set('connection', conn);
+
+    eventEmitter = new events.EventEmitter;
+    app.set('eventEmitter', eventEmitter);
+
     server = http.createServer(app);
     server.listen(3001)
         .on('listening', function () {
