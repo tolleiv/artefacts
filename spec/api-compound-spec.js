@@ -64,9 +64,8 @@ describe("the compound API", function () {
         );
     });
 
-    it("is able to generate some basic statistics", function(done) {
+    it("is able to generate some basic statistics", function (done) {
         request.get('/c/statistics', respondsPositive(function (body) {
-
             expect(body).toEqual(jasmine.any(Object));
             expect(body.projects).toEqual(2);
             expect(body.pipelines).toEqual(3);
@@ -74,8 +73,17 @@ describe("the compound API", function () {
             expect(body.states.green).toEqual(2);
             expect(body.states.red).toEqual(1);
             expect(body.states.yellow).toEqual(1);
-
             done();
         }));
-    })
+    });
+    it("it includes zero counts within statistics", function (done) {
+        models.Project.deleteAll(helper.persistConnection(),
+            function () {
+                request.get('/c/statistics', respondsPositive(function (body) {
+                    expect(body).toEqual(jasmine.any(Object));
+                    expect(body.projects).toEqual(0);
+                    done();
+                }));
+            });
+    });
 });

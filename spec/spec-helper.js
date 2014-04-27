@@ -152,6 +152,10 @@ exports.isStarted = function () {
     return started;
 };
 
+exports.persistConnection = function() {
+    return app.get('connection');
+}
+
 exports.stop = function (cb) {
     migrate.down(function () {
         server.close(cb);
