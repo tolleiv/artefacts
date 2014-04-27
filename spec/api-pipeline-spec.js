@@ -46,7 +46,7 @@ describe("the pipeline API", function () {
     });
     it("doesn't create a pipeline with invalid projects", function (done) {
         request.post('/pipeline', {title: 'fail', project_id: 100}, respondsNegative(function (body) {
-            expect(body.message).toEqual('Project invalid')
+            expect(JSON.stringify(body).toLowerCase()).toContain('project invalid')
             done();
         }));
     });
