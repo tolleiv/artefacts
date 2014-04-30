@@ -124,8 +124,7 @@ var startServer = function (env, model, conn) {
     app.set('model', model);
     app.set('connection', conn);
 
-    eventEmitter = new events.EventEmitter;
-    app.set('eventEmitter', eventEmitter);
+    app.set('events', function() { });
 
     server = http.createServer(app);
     server.listen(3001)
