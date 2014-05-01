@@ -1,0 +1,24 @@
+doctype html
+html(lang="en")
+    include inc/header
+    body
+        div.container
+            div.row
+                div.col-md-3
+                  div.panel.panel-default
+                    nav.panel-body
+                        ul.nav.nav-pills.nav-stacked
+                            li
+                                a(href="/") /
+                            li
+                                a(href="/ui/projects") /projects
+                            li
+                                a(href="/ui/pipelines") /pipelines
+                            li
+                                a(href="/ui/artefacts") /artefacts
+                            li
+                                a(href="/ui/states") /states
+
+                div.col-md-8
+                    block content
+        include inc/scripts

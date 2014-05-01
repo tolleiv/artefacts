@@ -1,0 +1,49 @@
+extends layout
+block content
+    div.panel.panel-default
+        div.panel-body
+
+            div.row.list-header
+                div.col-md-9
+                    h2 Projects overview
+                div.col-md-3
+                    button.btn.btn-primary.btn-project-create(type='button', data-loading-text="Creating..." ) Create new project
+            div.project-overview
+
+            div.callout.code-callout
+                p Curl syntax for project creation &nbsp;
+                p
+                    code curl -X POST -d title=myProject http://localhost:3000/project
+                p Curl syntax for project creation &nbsp;removal
+                p
+                    code curl -X DELETE http://localhost:3000/project/&lt;id&gt;
+
+    #editProject.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editProjectLabel', aria-hidden='true')
+        .modal-dialog
+            form.form-horizontal.project-edit(role='form')
+                .modal-content
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+                        h4.editProjectLabel.modal-title XXX project
+                    .modal-body
+                        .form-group
+                            label.col-sm-4.control-label(for='inputEmail3') Project title
+                            .col-sm-8
+                                input.inputTitle.form-control(name='title', placeholder='Project title')
+                    .modal-footer
+                        button.btn.btn-default(type='button', data-dismiss='modal') Close
+                        button.btn.btn-primary(type='submit') Save changes
+
+    #deleteProject.modal.fade.bs-example-modal-sm(tabindex='-1', role='dialog', aria-labelledby='deleteProjectLabel', aria-hidden='true')
+        .modal-dialog.modal-sm
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+                    h4.deleteProjectLabel.modal-title Delete project
+                .modal-body
+                    | Deleting projects will also remove the related pipelines and artefacts. Do you want to proceed?
+                .modal-footer
+                    button.btn.btn-default(type='button', data-dismiss='modal') Cancel
+                    button.btn.btn-danger(type='button', data-role='confirm') Proceed
+
+
