@@ -19,6 +19,16 @@ describe("the state API", function () {
     });
     afterEach(helper.stop);
 
+    it("lists existing states", function (done) {
+        request.get("/states", respondsPositive(function (body) {
+            expect(body).toEqual(jasmine.any(Array));
+            expect(body.length).toEqual(3);
+            expect(body[0].title).toEqual('first');
+
+            done();
+        }));
+    });
+
     it("can show single states", function (done) {
         request.get("/state/2", respondsPositive(function (body) {
             expect(body).toEqual(jasmine.any(Object));
