@@ -95,9 +95,21 @@ var projectList = {
 };
 
 var projectForm = {
+
+    initCreateForm: function () {
+        projectForm.init({
+            title: "Create project",
+            form: $('.project-edit'),
+            resetCallback: function () {
+                $('#editProject').modal('hide')
+            }
+        });
+        $('#editProject').modal('show')
+    },
+
     init: function (settings) {
         projectForm.config = {
-            title: 'Action project',
+            title: '',
             url: '/project',
             form: $('.project-form'),
             data: {},

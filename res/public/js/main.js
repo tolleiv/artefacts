@@ -22,17 +22,10 @@ $(document).ready(function () {
         });
     }
     var sockets = io.connect()
+        // project page
     projectList.init({sockets: sockets});
-
     $('.btn-project-create').click(function () {
-        projectForm.init({
-            title: "Create project",
-            form: $('.project-edit'),
-            method: 'POST',
-            resetCallback: function () {
-                $('#editProject').modal('hide')
-            }
-        });
-        $('#editProject').modal('show')
+        projectForm.initCreateForm();
     });
+    
 });
