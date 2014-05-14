@@ -3,11 +3,6 @@ Usage
 
 Until now this has just a REST API - the UI will follow soon.
 
-Command line
-------------
-
-` curl -i -X PUT http://localhost:3000/c/:project/:pipeline/:artefact/:state/:code `
-
 Development
 ===========
 
@@ -25,12 +20,17 @@ GET, PUT, DEL | /pipeline/:id | Read, Update, Delete pipeline
 GET | /pipeline/:id/artefacts | List artefacts for pipeline
 POST | /artefact | Create artefact
 GET, PUT, DEL | /artefact/:id | Read, Update, Delete artefact
-GET | /artefact/:id | Read a specific artefact property
+GET | /artefact/:id/:field | Read a specific artefact property
 PUT | /artefact/:id/:state/:code | Create/Update artefact state with specified code
 PUT | /c/:project/:pipeline/:artefact/:state/:code | Create/Update artefact state with the specified code for the existing artefact.
 POST | /c/:project/:pipeline/:artefact/:state/:code | Create artefact and artefact state (initial registration)
 GET | /c/:project/:pipeline/:state/:code | Find the most recent artefact with a specific code for a state
 GET | /c/statistics | Generate some statistics on the mananged data
+
+API command line usage
+----------------------
+
+` curl -i -X PUT http://localhost:3000/c/:project/:pipeline/:artefact/:state/:code `
 
 The Model {+Metadata} {+Operations}
 -----------------------------------
