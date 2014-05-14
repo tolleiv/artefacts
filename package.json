@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app",
-    "test": "istanbul test -x '**/migrations/**' jasmine-node -- --verbose --color --captureExceptions spec",
+    "test": "istanbul test -x '**/migrations/**' jasmine-node -- --verbose --color --captureExceptions spec"
   },
   "dependencies": {
     "express": "4.x",
@@ -19,12 +19,12 @@
     "db-migrate": ">=0.0.3",
     "async": ">=0.0.3",
     "jade": "*",
-    "socket.io": "*",
-    "coveralls": "~2.10.0"
+    "socket.io": "*"
   },
   "devDependencies": {
     "jasmine-node": ">= 0.0.1",
-    "istanbul": "~0.2.9"
+    "istanbul": "~0.2.9",
+    "coveralls": "~2.10.0"
   },
   "repository": {
     "type": "git",
