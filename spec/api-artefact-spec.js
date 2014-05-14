@@ -16,7 +16,7 @@ describe("the artefact API", function () {
         var pp11 = new models.Pipeline({title: "mainPipe11", project: p1 });
         var pp12 = new models.Pipeline({title: "refactoring", project: p1 })
         var a11 = new models.Artefact({version: "0.0.1", pipeline: pp11});
-        var a12 = new models.Artefact({version: "0.0.2", pipeline: pp11});
+        var a12 = new models.Artefact({version: "0.0.2", pipeline: pp11, buildUrl: 'ur://l'});
         var a13 = new models.Artefact({version: "0.0.3", pipeline: pp11});
 
         runs(helper.start(persist, models, [
@@ -41,6 +41,21 @@ describe("the artefact API", function () {
             done();
         }));
     });
+
+    it("can show single artefacts field values", function(done) {
+        request.get("/artefact/2/buildUrl", respondsPositive(function(body) {
+            expect(body).toEqual('ur://l')
+            done();
+        }));
+    });
+
+    it("will fail if requested artefact field doesn't exist", function(done) {
+        request.get("/artefact/2/blub", respondsNegative(function (body) {
+            expect(body.message).toContain('field unknown')
+            done();
+        }));
+    })
+
     it("can create artefacts", function (done) {
         request.post('/artefact', {version: '0.0.2', pipeline_id: 2}, respondsPositive(function (body) {
             expect(body).toEqual(jasmine.any(Object));
