@@ -28,6 +28,8 @@ GET, PUT, DEL | /artefact/:id | Read, Update, Delete artefact
 PUT | /artefact/:id/:state/:code | Create/Update artefact state with specified code
 PUT | /c/:project/:pipeline/:artefact/:state/:code | Create/Update artefact state with the specified code for the existing artefact.
 POST | /c/:project/:pipeline/:artefact/:state/:code | Create artefact and artefact state (initial registration)
+GET | /c/:project/:pipeline/:state/:code | Find the most recent artefact with a specific code for a state
+GET | /c/statistics | Generate some statistics on the mananged data
 
 The Model {+Metadata} {+Operations}
 -----------------------------------

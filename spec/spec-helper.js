@@ -98,7 +98,7 @@ exports.req = {
             expect(err).toBe(null)
             expect(res.statusCode).toBeGreaterThan(399)
             expect(res.statusCode).toBeLessThan(500)
-            cb && cb(body);
+            cb && cb(body, res.statusCode);
         }
     }
 };
