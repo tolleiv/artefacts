@@ -19,7 +19,8 @@
     "db-migrate": ">=0.0.3",
     "async": ">=0.0.3",
     "jade": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "nodelint": "~0.6.2"
   },
   "devDependencies": {
     "jasmine-node": ">= 0.0.1",
