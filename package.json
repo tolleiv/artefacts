@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node app",
-    "test": "./node_modules/.bin/istanbul test -x '**/migrations/**' jasmine-node -- --verbose --color --captureExceptions spec"
+    "test": "istanbul test -x '**/migrations/**' jasmine-node -- --verbose --color --captureExceptions spec",
+    "coveralls": "istanbul cover -x '**/migrations/**' jasmine-node --report lcovonly --  --captureExceptions spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "dependencies": {
     "express": "4.x",
