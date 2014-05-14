@@ -48,6 +48,7 @@ Build status
 
 [![Build Status](https://travis-ci.org/tolleiv/artefacts.png?branch=master)](https://travis-ci.org/tolleiv/artefacts)
 [![Dependency Status](https://gemnasium.com/tolleiv/artefacts.svg)](https://gemnasium.com/tolleiv/artefacts)
+[![Coverage Status](https://coveralls.io/repos/tolleiv/artefacts/badge.png?branch=master)](https://coveralls.io/r/tolleiv/artefacts?branch=master)
 
 License
 -------
