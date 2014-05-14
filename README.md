@@ -47,7 +47,7 @@ Build status
 ------------
 
 [![Build Status](https://travis-ci.org/tolleiv/artefacts.png?branch=master)](https://travis-ci.org/tolleiv/artefacts)
-
+[![Dependency Status](https://gemnasium.com/tolleiv/artefacts.svg)](https://gemnasium.com/tolleiv/artefacts)
 
 License
 -------

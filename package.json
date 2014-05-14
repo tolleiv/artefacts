@@ -7,7 +7,12 @@
         "test": "jasmine-node --verbose --color --captureExceptions spec"
     },
     "dependencies": {
-        "express": "3.x",
+        "express": "4.x",
+        "serve-favicon": "*",
+        "body-parser": "*",
+        "method-override": "*",
+        "morgan": "*",
+        "errorhandler": "*",
         "request": "> 0.0.1",
         "persist": ">= 0.0.1",
         "sqlite3": ">= 0.0.1",
